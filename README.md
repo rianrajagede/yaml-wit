@@ -93,7 +93,7 @@ The second type will always train your all data (be careful with redundancy if y
 ```
 data:
   - \ig{Good afternoon guys!}
-  - \ia{Who the hell are you?!!}
+  - \ia{Who are you again?}
   - \is{Give me any information about \n{Gil}{Gilfoyle}}
   - \is{where is I can find King \n{Dinesh}}?
 ```
