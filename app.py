@@ -3,14 +3,18 @@ import re
 import collections
 import requests
 import json
+import os
 
-def read(name="config.yaml"):
+this_path, _ = os.path.split(__file__)
+config_path = os.path.join(this_path, "config.yaml")
+
+def read():
 
     global definition
     global config
     global sentences
 
-    with open("config.yaml") as f:
+    with open(config_path) as f:
         res = yaml.load(f)
 
     definition = res["definition"]
@@ -26,10 +30,10 @@ def mapper(code, reverse=False):
         return inv_definition[code]
     return definition[code]
 
-def tolist(s, name="config.yaml"):
+def tolist(s):
 
     sentences = []
-    with open(name) as f:
+    with open(config_path) as f:
         res = yaml.load(f)
 
     start = res["start"]
