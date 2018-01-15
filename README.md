@@ -1,23 +1,23 @@
 # YAML trainer for [Wit.ai](https://wit.ai)
 
-Auto Train your wit.ai bot using YAML format dataset. This program is created to aims:
-- Avoiding one-by-one put your sentence into Web GUI
-- Minimizing "code-interaction" and "code-formatting" when training your bot
-- Easily to train with entities tagged data
+Auto Train your wit.ai bot using YAML format dataset. The purposes of making this program are:
+- Avoiding submitting one-by-one your data through the Web GUI
+- Minimize the use of code when training your bot
+- Make it easier to train using entities tagged data
 
 ## Prerequisites
 
-This program run on Python 3 and need some requirements written in requirements.txt. Install it using the command below (after you install pip on your system):
+This program runs on Python 3 and needs some requirements written in requirements.txt. Install it using the command below (after you install pip on your system):
 
 ```
 pip install -r requirements.txt
 ```
 
-## Setting
+The next step is to create your bot first through the web wit ai, then get the BEARER code in the setting menu.
 
-Before you start to train your bot, first you need to create your bot using Web GUI of wit.ai, then get the BEARER code in settings menu.
+## Bot Preparation
 
-Then, Open config.yaml which contains 3 following keys
+Open config.yaml which contains 3 following keys
 
    - `config`
    - `definition`
@@ -25,17 +25,28 @@ Then, Open config.yaml which contains 3 following keys
 
 ### `config`
 
-Write your BEARER code and version (latest date you train your bot) here
+Write your BEARER code and version (the latest date) here
+
+Example:
 
 ```
 config:
-  bearer: 6RELTMESF23TMQCWJQVXQZGLPHHDX7ZJ
-  version: 05/01/2018
+  bearer: NKPU6CR7SCIHUZ5NR4762E2WXLQ6V3IP
+  version: 15/01/2018
 ```
 
 ### `definition`
 
-Define abbreviation (codename) of your intents and entities name. The definition will make it easier to write entities in the dataset. You can use any letter or number to define a codename. But, to differentiate the intent and the entities, it is **mandatory** to write intent codename with a lowercase 'i' for the first character.
+Define abbreviations of your intents and entities name. This abbreviation will make it easier for you when labeling the entities of your  data later. 
+
+---
+**NOTE**
+
+You can use any letter to make abbreviation. But to distinguish between intents and entities is **required** to start the abbreviation for the intents with the letter 'i'.
+
+---
+
+Example:
 
 ```
 definition:
@@ -49,34 +60,55 @@ definition:
   t1: hours
   t2: minutes
 ```
-To use those definitions in your dataset use backslash '\\' before the tagged part of a sentence (LaTeX style). For example, if you have a sentence below and a definition above. 
+
+#### Usage
+
+To use those abbreviations in your dataset, use backslash '\\' before the part of the sentence you want to tag (LaTeX style). For example, if you have a sentence below and a list of abbreviations above. 
 
 ```
 Set the date to 5 Feb, please
 ```
 
-to define the intention to set a date, tag the sentence with set intent (`is`) codename. Close it with curly bracket, and put codename before it:
+to define intent to set date, tag the sentence with set intent (`is`) abbreviation with formats like the example below:
 
 ```
 \is{Set the date to 5 Feb, please}
 ```
 
-then define the date entities, with the same rules:
+Then, to define the date entities, tag the date part of the sentence with `d`:
 
 ```
 \is{Set the date to \d{5} Feb, please}
 ```
-If you are using keyword entities in wit.ai you can give specific value to an entities. To do that, create additional bracket just after tagged part of a sentence, then define the returned value. In the example below we tag "Feb" as month entities, with  keyword value "february":
+
+If you are using [keyword entities](https://wit.ai/docs/recipes#extract-a-keyword-entity) in wit.ai you can assign a different value to an entity (which allows you to create synonims of keyword). To do that, add additional brackets right after tagged part of the sentence. then define the desired value in the brackets. In the example below we will tag "Feb" as month entities, but we assign it with value "february":
 
 ```
 \is{Set the date to \d{5} \m{Feb}{february}, please}
 ```
 
+The example above will train your bot with a data below:
+
+```
+text : Set the date to 5 Feb, please
+intent : set
+date : 5
+month : february
+```
+
+
 ### `data`
 
 Write your dataset here. There are two styles to write your dataset, numbered dataset or not numbered dataset. And each train, you should only use one style.
 
-Numbered dataset need another two keys `start` and `end` to define which data will be trained. It intended to prevent unintentionally redundancy when training your bot. If you define `end` with -1 it will train your data from number defined in `start` until the last data. `start` and `end` are inclusive.
+---
+**NOTE**
+
+In each training you are only allowed to use one style of dataset
+
+---
+
+Numbered dataset needs another two keys: `start` and `end`, to define the start and end of the part of data to be trained. It will be useful to avoid accidental redundancy of data train when training your bot. If you define the value of `end` with -1 then the data to be trained starts from the numbered data defined in `start` to the last. `start` and `end` are inclusive.
 
 ```
 start: 1
@@ -89,7 +121,7 @@ data:
   5: who are you \n{dinesh}{Dinesh}?
 ```
 
-The second type will always train all of your data (becareful with redundancy if you train multiple times).
+The second type will always train the bot with all of your data (be careful with redundancy if you train your bot multiple times).
 
 ```
 data:
@@ -99,9 +131,9 @@ data:
   - \is{where is I can find King \n{Dinesh}}?
 ```
 
-## Usage
+## Bot Training
 
-After defining everything in config.yaml, simply train your bot by running the following command in the same directory with app.py and config.yaml:
+After define everything in config.yaml, simply train your bot by running the following command in the same directory with app.py and config.yaml:
 
 ```
 python3 app.py
