@@ -4,6 +4,7 @@ import collections
 import requests
 import json
 import os
+from tqdm import tqdm
 
 this_path, _ = os.path.split(__file__)
 config_path = os.path.join(this_path, "config.yaml")
@@ -85,6 +86,7 @@ def parse(s):
     return clean, entities
 
 def main():
+    print("Load data...")
     c, d, ss = read()
     train_url = "https://api.wit.ai/samples?v=" + str(c["version"])
     post_headers = {"Authorization":"Bearer " + str(c["bearer"]), "Content-Type": "application/json"}
@@ -101,8 +103,9 @@ def main():
     if type(ss) is dict:
         ss = tolist(ss)
 
+    print("Start Training...")
     total_req = 0
-    for s in ss:
+    for s in tqdm(ss):
         clean, res = parse(s)
 
         req = requests.post(train_url, headers=post_headers, data=json.dumps(
