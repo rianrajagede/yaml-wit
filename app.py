@@ -1,9 +1,10 @@
+from __future__ import print_function
+import os, sys
 import yaml
 import re
 import collections
 import requests
 import json
-import os
 from tqdm import tqdm
 
 this_path, _ = os.path.split(__file__)
@@ -15,13 +16,35 @@ def read():
     global config
     global sentences
 
-    with open(config_path) as f:
-        res = yaml.load(f)
+    try:
+        dataset_name = sys.argv[1]
+        dataset_path = os.path.join(this_path, dataset_name+".yaml")
+        d = open(dataset_path,"r")
+        c =  open(config_path,"r")
+    except IndexError:
+        print("Please run with dataset name: python app.py dataset_name")
+        sys.exit(0)
+    except Exception as e:
+        print(e)
+        sys.exit(0)
+    else:
+        conf_file = yaml.load(c)
+        dataset_file = yaml.load(d)
+        config = conf_file["config"]
+        definition = dataset_file["definition"]
+        sentences = dataset_file["data"]
 
-    definition = res["definition"]
-    config = res["config"]
-    sentences = res["data"]
-    
+        if type(sentences) is dict:    
+            sentences = []
+            start = dataset_file["start"]
+            end = len(s) if dataset_file["end"]==-1 else dataset_file["end"]
+
+            for i in list(range(start, end+1)):
+                try:
+                    sentences.append(dataset_file["data"][i])
+                except Exception as e:
+                    print(e)
+
     return config, definition, sentences
 
 def mapper(code, reverse=False):
@@ -30,26 +53,6 @@ def mapper(code, reverse=False):
     if reverse:
         return inv_definition[code]
     return definition[code]
-
-def tolist(s):
-
-    sentences = []
-    with open(config_path) as f:
-        res = yaml.load(f)
-
-    start = res["start"]
-    end = res["end"]
-
-    if end==-1:
-        end = len(s)
-
-    for i in list(range(start, end+1)):
-        if i in res["data"]:
-            sentences.append(res["data"][i])
-        else:
-            print("WARNING: data number",str(i),"doesn't exist")
-    
-    return sentences
 
 def parse(s):
 
@@ -88,11 +91,13 @@ def parse(s):
 def main():
     print("Load data...")
     c, d, ss = read()
+
     train_url = "https://api.wit.ai/samples?v=" + str(c["version"])
     post_headers = {"Authorization":"Bearer " + str(c["bearer"]), "Content-Type": "application/json"}
     get_headers = {"Authorization":"Bearer " + str(c["bearer"])}
     entities_url = "https://api.wit.ai/entities?v=" + str(c["version"])
 
+    print("Check all entities...")
     entities = requests.get(entities_url, headers=get_headers)
     for key, ent in d.items():
         if ent not in entities and key[0]!='i':
@@ -100,14 +105,10 @@ def main():
                 {"id" : str(ent)}
             ))
 
-    if type(ss) is dict:
-        ss = tolist(ss)
-
     print("Start Training...")
     total_req = 0
     for s in tqdm(ss):
         clean, res = parse(s)
-
         req = requests.post(train_url, headers=post_headers, data=json.dumps(
             [{
                 "text": clean,
