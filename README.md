@@ -64,13 +64,15 @@ pip install -r requirements.txt
 
     #### Usage
 
-    To use those abbreviations in your dataset, use backslash '\\' before the part of the sentence you want to tag (LaTeX style). For example, if you have a sentence below and a list of abbreviations above. 
+    To use those abbreviations in your dataset, use backslash '\\' before the part of the sentence you want to tag (LaTeX style). Use format `\abbrevations{tagged_text}`.
+    
+    For example, if you have a sentence below and a list of abbreviations above. 
 
     ```
     Set the date to 5 Feb, please
     ```
 
-    to define intent to set date, tag the sentence with set intent (`is`) abbreviation with formats like the example below:
+    to define the intent to "set", tag the whole sentence with set intent (`is`) abbreviation with formats like the example below:
 
     ```
     \is{Set the date to 5 Feb, please}
@@ -82,13 +84,15 @@ pip install -r requirements.txt
     \is{Set the date to \d{5} Feb, please}
     ```
 
-    If you are using [keyword entities](https://wit.ai/docs/recipes#extract-a-keyword-entity) in wit.ai you can assign a different value to an entity (which allows you to create synonims of keyword). To do that, add additional brackets right after tagged part of the sentence. then define the desired value in the brackets. In the example below we will tag "Feb" as month entities, but we assign it with value "february":
+    If you are using [keyword entities](https://wit.ai/docs/recipes#extract-a-keyword-entity) in wit.ai you can assign a different value to an entity (which allows you to create synonims of keyword). To do that, add additional brackets right after tagged part of the sentence. Use format `\abbrevations{tagged_text}{assigned_value}`.
+    
+    In the example below we will tag "Feb" as month entities, but we assign it with value "february":
 
     ```
     \is{Set the date to \d{5} \m{Feb}{february}, please}
     ```
 
-    The example above will train your bot with a data below:
+    After you run it, the example above will train your bot with a data below:
 
     ```
     text : Set the date to 5 Feb, please
@@ -141,7 +145,7 @@ After define everything in config.yaml, simply train your bot by running the fol
 ```
 python app.py dataset_name
 ```
-replace `dataset_name` with your dataset file name (without *.yaml)
+replace `dataset_name` with your dataset file name (with or without *.yaml)
 
 ## Example
 
