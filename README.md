@@ -43,7 +43,7 @@ pip install -r requirements.txt
     ---
     **WARNING**
 
-    You can use any letter to make abbreviation. But to distinguish between intents and entities is **required** to start the abbreviation for the intents with the letter 'i'.
+    You can use any letter to make abbreviation. But to distinguish between intents and entities is **required** to start the abbreviation for the intents with the letter 'i'. So, the first letter of an abbreviation is 'i' if and only if it represents an intent.
 
     ---
 
