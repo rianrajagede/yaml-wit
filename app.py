@@ -18,9 +18,10 @@ def read():
 
     try:
         dataset_name = sys.argv[1]
-        dataset_path = os.path.join(this_path, dataset_name+".yaml")
+        ext = ".yaml" if dataset_name[-5:]!=".yaml" else ""
+        dataset_path = os.path.join(this_path, dataset_name + ext)
         d = open(dataset_path,"r")
-        c =  open(config_path,"r")
+        c = open(config_path,"r")
     except IndexError:
         print("Please run with dataset name: python app.py dataset_name")
         sys.exit(0)
