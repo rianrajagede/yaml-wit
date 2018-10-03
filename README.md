@@ -1,7 +1,7 @@
 # YAML trainer for [Wit.ai](https://wit.ai)
 
-Auto Train your wit.ai bot using YAML format dataset. The purposes of making this program are:
-- Avoiding submitting one-by-one your data through the Web GUI
+Auto Train your wit.ai bot using YAML format dataset. The goal of making this program are:
+- Avoid the task of submitting data one-by-one through the Web GUI
 - Minimize the use of code when training your bot
 - Make it easier to train using entities tagged data
 
@@ -15,7 +15,7 @@ pip install -r requirements.txt
 
 ## Bot Preparation
 
-0. Create your bot first through the web wit ai, then get the BEARER code in the setting menu.
+0. Create your bot first through the wit ai site, then get the BEARER code in the setting menu.
 
 1. Open config.yaml, write your BEARER code and version (the latest date) here
 
