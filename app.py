@@ -8,7 +8,6 @@ import json
 from tqdm import tqdm
 
 this_path, _ = os.path.split(__file__)
-config_path = os.path.join(this_path, "config.yaml")
 
 def read():
 
@@ -17,13 +16,15 @@ def read():
     global sentences
 
     try:
-        dataset_name = sys.argv[1]
+        bot_name = sys.argv[1]
+        dataset_name = sys.argv[2]
         ext = ".yaml" if dataset_name[-5:]!=".yaml" else ""
-        dataset_path = os.path.join(this_path, dataset_name + ext)
+        dataset_path = os.path.join(this_path, bot_name, dataset_name + ext)
+        config_path = os.path.join(this_path, bot_name, "_config.yaml")
         d = open(dataset_path,"r")
         c = open(config_path,"r")
     except IndexError:
-        print("Please run with dataset name: python app.py dataset_name")
+        print("Please run with format: python app.py <bot_name> <dataset_name>")
         sys.exit(0)
     except Exception as e:
         print(e)
@@ -32,7 +33,7 @@ def read():
         conf_file = yaml.load(c)
         dataset_file = yaml.load(d)
         config = conf_file["config"]
-        definition = dataset_file["definition"]
+        definition = conf_file["definition"]
         sentences = dataset_file["data"]
 
         if type(sentences) is dict:    

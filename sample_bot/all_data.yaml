@@ -1,0 +1,6 @@
+# LIST FORMAT THAT DOES NOT NEED "start" AND "end" KEY:
+data:
+  - \ig{Good afternoon guys!}
+  - \ia{Who the hell are you?!!}
+  - \is{Give me any information about \n{Gil}{Gilfoyle}}
+  - \is{where is I can find King \n{Dinesh}}?

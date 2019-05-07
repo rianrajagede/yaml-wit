@@ -1,0 +1,14 @@
+config:
+  bearer: T2KDRUFPW27ZI2DA4OHCJ5LF755YXKPV
+  version: 07/05/2019
+
+definition:
+  
+  # INTENTS USE 'i' FOR THE FIRST CHARACTER
+  ig: greetings
+  ia: aboutme
+  is: search
+
+  # ENTITIES
+  n: person_name
+  t: things
