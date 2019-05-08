@@ -30,8 +30,8 @@ def read():
         print(e)
         sys.exit(0)
     else:
-        conf_file = yaml.load(c)
-        dataset_file = yaml.load(d)
+        conf_file = yaml.load(c, Loader=yaml.BaseLoader)
+        dataset_file = yaml.load(d, Loader=yaml.BaseLoader)
         config = conf_file["config"]
         definition = conf_file["definition"]
         sentences = dataset_file["data"]
